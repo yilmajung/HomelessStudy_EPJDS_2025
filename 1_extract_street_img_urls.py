@@ -3,10 +3,11 @@ import requests
 import mercantile
 from datetime import datetime
 from vt2geojson.tools import vt_bytes_to_geojson
+from dotenv import load_dotenv
 
-#Mapillary access token
-os.environ["MAPILLARY_ACCESS_TOKEN"] = os.getenv("MAPILLARY_ACCESS_TOKEN", "MLY|MY_TOKEN")
-MAPILLARY_ACCESS_TOKEN = os.getenv("MAPILLARY_ACCESS_TOKEN")
+load_dotenv()
+# Mapillary API access token
+ACCESS_TOKEN = os.getenv("MAPILLARY_ACCESS_TOKEN", "MLY|MY_TOKEN")
 
 # City bounding box coordinates (west, south, east, north)
 # Washington D.C. bounding box 
@@ -30,7 +31,7 @@ OUTFILE = "dc_mapillary_image_data.csv"
 def fetch_tile_geojson(x, y, z):
     url = (
         f"https://tiles.mapillary.com/maps/vtp/mly1_public/2/"
-        f"{z}/{x}/{y}?access_token={MAPILLARY_ACCESS_TOKEN}"
+        f"{z}/{x}/{y}?access_token={ACCESS_TOKEN}"
     )
     r = requests.get(url)
     r.raise_for_status()
