@@ -5,6 +5,7 @@ from datetime import datetime
 from vt2geojson.tools import vt_bytes_to_geojson
 
 #Mapillary access token
+os.environ["MAPILLARY_ACCESS_TOKEN"] = os.getenv("MAPILLARY_ACCESS_TOKEN", "MLY|MY_TOKEN")
 MAPILLARY_ACCESS_TOKEN = os.getenv("MAPILLARY_ACCESS_TOKEN")
 
 # City bounding box coordinates (west, south, east, north)
