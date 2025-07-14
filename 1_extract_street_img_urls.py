@@ -4,6 +4,7 @@ import mercantile
 from datetime import datetime
 from vt2geojson.tools import vt_bytes_to_geojson
 from dotenv import load_dotenv
+from tqdm import tqdm
 
 load_dotenv()
 # Mapillary API access token
@@ -53,7 +54,7 @@ def main():
     records = []
     tiles = list(mercantile.tiles(WEST, SOUTH, EAST, NORTH, 14))
     
-    for tile in tiles:
+    for tile in tqdm(tiles, desc="Tiles", unit="tile"):
         geojson = fetch_tile_geojson(tile.x, tile.y, tile.z)
         for feat in geojson["features"]:
             lon, lat = feat["geometry"]["coordinates"]
