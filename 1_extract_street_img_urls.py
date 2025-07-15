@@ -53,6 +53,8 @@ def fetch_image_url(image_id):
 def main():
     records = []
     tiles = list(mercantile.tiles(WEST, SOUTH, EAST, NORTH, 14))
+    # For testing, limit the number of tiles as 2
+    tiles = tiles[:2]  # Uncomment to limit to first 2 tiles for testing
     
     for tile in tqdm(tiles, desc="Tiles", unit="tile"):
         geojson = fetch_tile_geojson(tile.x, tile.y, tile.z)
