@@ -5,6 +5,7 @@ from datetime import datetime
 from vt2geojson.tools import vt_bytes_to_geojson
 from dotenv import load_dotenv
 from tqdm import tqdm
+import csv
 
 load_dotenv()
 # Mapillary API access token
