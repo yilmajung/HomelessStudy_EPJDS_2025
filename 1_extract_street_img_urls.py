@@ -6,6 +6,7 @@ from vt2geojson.tools import vt_bytes_to_geojson
 from dotenv import load_dotenv
 from tqdm import tqdm
 import csv
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 load_dotenv()
 # Mapillary API access token
@@ -49,38 +50,49 @@ def fetch_image_url(image_id):
     r.raise_for_status()
     return r.json().get("thumb_2048_url")
 
-# MAIN WORKFLOW
-
-def main():
-    records = []
-    tiles = list(mercantile.tiles(WEST, SOUTH, EAST, NORTH, 14))
-    # For testing, limit the number of tiles as 2
-    tiles = tiles[:2]  # Uncomment to limit to first 2 tiles for testing
-    
-    for tile in tqdm(tiles, desc="Tiles", unit="tile"):
+def process_tile(tile):
+    recs = []
+    try:
         geojson = fetch_tile_geojson(tile.x, tile.y, tile.z)
         for feat in geojson["features"]:
             lon, lat = feat["geometry"]["coordinates"]
             if not (WEST <= lon <= EAST and SOUTH <= lat <= NORTH):
                 continue
-
             props = feat["properties"]
             cap_at = props.get("captured_at", 0)
             if cap_at < start_ms or cap_at > end_ms:
                 continue
-
             img_id = props.get("id")
             if not img_id:
                 continue
-
             img_url = fetch_image_url(img_id)
             if img_url:
-                records.append((img_id, cap_at, img_url))
+                recs.append((img_id, cap_at, lon, lat, img_url))
+    except Exception as e:
+        print(f"[Error] Tile {tile.x},{tile.y}: {e}")
+    return recs
 
-    # Write CSV: id, captured_at (ms), url
+
+# MAIN WORKFLOW
+
+def main():
+    records = []
+    tiles = list(mercantile.tiles(WEST, SOUTH, EAST, NORTH, 14))
+    
+    max_workers = min(32, (os.cpu_count() or 1) * 5)
+
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        future_to_tile = {executor.submit(process_tile, t): t for t in tiles}
+        for future in tqdm(as_completed(future_to_tile),
+                           total=len(future_to_tile),
+                           desc="Processing tiles",
+                           unit="tile"):
+            records.extend(future.result())
+
+    # Write CSV: id, captured_at_ms, lon, lat, url
     with open(OUTFILE, "w", newline="") as f:
         writer = csv.writer(f)
-        writer.writerow(["id", "captured_at_ms", "url"])
+        writer.writerow(["id", "captured_at_ms", "lon", "lat", "url"])
         writer.writerows(records)
 
     print(f"Done — saved {len(records)} records to {OUTFILE}")
