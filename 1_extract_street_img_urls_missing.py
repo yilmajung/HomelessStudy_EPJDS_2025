@@ -64,8 +64,8 @@ def retry_missing_tiles(missing_coords, max_workers=8):
 if __name__ == "__main__":
     
     MISSING_COORDS = [
-       (4684,6269),
-        (4683,6267),
+    #    (4684,6269),
+    #     (4683,6267),
         (4687,6271),
         (4683,6264),
         (4685,6262),
