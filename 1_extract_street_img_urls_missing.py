@@ -18,7 +18,7 @@ END_DATE   = datetime(2024, 5, 31, 23, 59, 59)
 start_ms = int(START_DATE.timestamp() * 1000)
 end_ms   = int(END_DATE.timestamp()   * 1000)
 
-OUTFILE = "dc_mapillary_image_data.csv"  
+OUTFILE = "dc_mapillary_image_data.csv"
 
 def fetch_tile_geojson(x, y, z):
     """Fetch and decode a Mapillary vector tile to GeoJSON."""
@@ -80,6 +80,7 @@ def process_tile(tile):
 # MAIN WORKFLOW
 
 if __name__ == "__main__":
+
     # Prepare CSV
     header = ["id", "captured_at_ms", "lon", "lat", "url"]
     if not os.path.exists(OUTFILE):
@@ -87,7 +88,40 @@ if __name__ == "__main__":
             csv.writer(f).writerow(header)
 
     # Build tile list
-    tiles = list(mercantile.tiles(WEST, SOUTH, EAST, NORTH, 14))
+    MISSING_COORDS = [
+        (4684,6269),
+        (4683,6267),
+        (4687,6271),
+        (4683,6264),
+        (4685,6262),
+        (4685,6268),
+        (4685,6266),
+        (4687,6264),
+        (4686,6266),
+        (4688,6266),
+        (4688,6269),
+        (4687,6266),
+        (4689,6270),
+        (4689,6269),
+        (4685,6265),
+        (4690,6264),
+        (4688,6265),
+        (4690,6266),
+        (4688,6267),
+        (4690,6267),
+        (4684,6266),
+        (4685,6267),
+        (4688,6270),
+        (4689,6265),
+        (4687,6267),
+        (4686,6263),
+        (4690,6269),
+        (4687,6268),
+        (4688,6268),
+        (4686,6268)
+    ]
+
+    tiles = [mercantile.Tile(x, y, 14) for x, y in MISSING_COORDS]
 
     # Process in parallel, flush per tile
     max_workers = min(32, (os.cpu_count() or 1) * 5)
