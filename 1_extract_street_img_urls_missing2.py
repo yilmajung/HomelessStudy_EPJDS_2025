@@ -78,9 +78,6 @@ def process_tile(tile):
 # Build missing tile list
 MISSING_COORDS = [
     (4685,6268),
-    (4688,6269),
-    (4687,6264),
-    (4687,6268),
     (4685,6262)
 ]
 
