@@ -29,7 +29,7 @@ start_ms = int(START_DATE.timestamp() * 1000)
 end_ms   = int(END_DATE.timestamp()   * 1000)
 
 # Output CSV
-OUTFILE = "dc_mapillary_image_data.csv"
+OUTFILE = "dallas_mapillary_image_data.csv"
 
 # Create a function to fetch the Mapillary vector tile and decode it to GeoJSON
 def fetch_tile_geojson(x, y, z):
