@@ -14,8 +14,11 @@ load_dotenv()
 ACCESS_TOKEN = os.getenv("MAPILLARY_ACCESS_TOKEN", "MLY|MY_TOKEN")
 
 # City bounding box coordinates (west, south, east, north)
+# Dallas, Texas bounding box
+WEST, SOUTH, EAST, NORTH = -96.997320, 32.613766, -96.443293, 33.039394
+
 # Washington D.C. bounding box 
-WEST, SOUTH, EAST, NORTH = -77.1198, 38.7916, -76.9094, 38.9955
+# WEST, SOUTH, EAST, NORTH = -77.1198, 38.7916, -76.9094, 38.9955
 
 # San Francisco bounding box
 # WEST, SOUTH, EAST, NORTH = -122.5149, 37.7080, -122.3569, 37.8324
