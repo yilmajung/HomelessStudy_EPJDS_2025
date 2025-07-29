@@ -16,7 +16,7 @@ INTERMEDIATE_CSV = 'dallas_intermediate_preds.csv'
 URL_COL = 'url'
 
 NUM_WORKERS = 20
-BATCH_SIZE = 32
+BATCH_SIZE = 512
 SAVE_EVERY = 1000
 
 # Load YOLO classifier on GPU
