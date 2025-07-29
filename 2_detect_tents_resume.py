@@ -57,7 +57,7 @@ def predict_batch(batch_data):
 # Save intermediate CSV
 def save_intermediate():
     df.to_csv(INTERMEDIATE_CSV, index=False)
-    print(f"💾 Intermediate results saved to {INTERMEDIATE_CSV}")
+    print(f"Intermediate results saved to {INTERMEDIATE_CSV}")
 
 # Main Loop
 batch = []
