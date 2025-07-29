@@ -16,8 +16,8 @@ INTERMEDIATE_CSV = 'dallas_intermediate_preds.csv'
 URL_COL = 'url'
 
 NUM_WORKERS = 20
-BATCH_SIZE = 512
-SAVE_EVERY = 1000
+BATCH_SIZE = 128
+SAVE_EVERY = 5000
 
 # Load YOLO classifier on GPU
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
