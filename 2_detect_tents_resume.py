@@ -45,7 +45,7 @@ def fetch_image(idx_url):
 # Classifier batch prediction
 def predict_batch(batch_data):
     indices, images = zip(*batch_data)
-    results = model(list(images))
+    results = model(list(images), verbose=False)
     output = []
     for i, r in enumerate(results):
         pred_class = int(r.probs.top1)
