@@ -10,7 +10,7 @@ import os
 
 # Configuration
 MODEL_PATH = 'yolo/weights/best.pt'
-INPUT_CSV = 'dallas_mapillary_image_data.csv'
+INPUT_CSV = 'filtered_dallas_mapillary_image_data.csv'
 OUTPUT_CSV = 'dallas_image_urls_with_preds.csv'
 INTERMEDIATE_CSV = 'dallas_intermediate_preds.csv'
 URL_COL = 'url'
