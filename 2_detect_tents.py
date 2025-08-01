@@ -10,7 +10,7 @@ import os
 
 # Configuration
 MODEL_PATH = 'yolo/weights/best.pt'
-INPUT_CSV = 'filtered_dallas_mapillary_image_data.csv'
+INPUT_CSV = 'filtered_dallas_mapillary_image_data_part1.csv'
 OUTPUT_CSV = 'dallas_image_urls_with_preds.csv'
 INTERMEDIATE_CSV = 'dallas_intermediate_preds.csv'
 URL_COL = 'url'
@@ -42,7 +42,7 @@ def fetch_image(idx_url):
 # Classifier batch prediction
 def predict_batch(batch_data):
     indices, images = zip(*batch_data)
-    results = model(list(images))
+    results = model(list(images), verbose=False)
     output = []
     for i, r in enumerate(results):
         pred_class = int(r.probs.top1)

@@ -10,9 +10,9 @@ import os
 
 # Configuration
 MODEL_PATH = 'yolo/weights/best.pt'
-INPUT_CSV = 'filtered_dallas_mapillary_image_data.csv'
-OUTPUT_CSV = 'dallas_image_urls_with_preds.csv'
-INTERMEDIATE_CSV = 'dallas_intermediate_preds.csv'
+INPUT_CSV = 'filtered_dallas_mapillary_image_data_part1.csv'
+OUTPUT_CSV = 'dallas_image_urls_with_preds_part1.csv'
+INTERMEDIATE_CSV = 'dallas_intermediate_preds_part1.csv'
 URL_COL = 'url'
 
 NUM_WORKERS = 20
@@ -24,7 +24,7 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu'
 model = YOLO(MODEL_PATH).to(device)
 
 # Load and prepare CSV
-df = pd.read_csv('dallas_intermediate_preds.csv')
+df = pd.read_csv('dallas_intermediate_preds_part1.csv')
 df['prediction'] = df['prediction'].fillna('')
 df['confidence'] = df['confidence'].fillna('')
 
