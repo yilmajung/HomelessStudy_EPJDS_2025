@@ -17,7 +17,7 @@ URL_COL = 'url'
 
 NUM_WORKERS = 20
 BATCH_SIZE = 32
-SAVE_EVERY = 1000
+SAVE_EVERY = 5000
 
 # Load YOLO classifier on GPU
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
