@@ -37,7 +37,7 @@ else:
     df['confidence'] = ''
 
 # Identify rows that need to be processed
-df_to_process = df[(df['prediction'] == '') | (df['prediction'] == 'ERROR')].copy()
+df_to_process = df[(df['prediction'] == '') | (df['prediction'].isna()) | (df['prediction'] == 'ERROR')].copy()
 
 # Image fetcher
 def fetch_image(idx_url):
