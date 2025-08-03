@@ -17,7 +17,7 @@ OUTPUT_CSV = f'output_chunk_{chunk_id}.csv'
 INTERMEDIATE_CSV = f'intermediate_chunk_{chunk_id}.csv'
 URL_COL = 'url'
 
-NUM_WORKERS = 20
+NUM_WORKERS = 10
 BATCH_SIZE = 16
 SAVE_EVERY = 3000
 
