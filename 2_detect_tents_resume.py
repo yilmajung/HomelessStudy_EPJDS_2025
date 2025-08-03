@@ -7,24 +7,26 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
 import torch
 import os
+import sys
 
 # Configuration
+chunk_id = int(sys.argv[1])
 MODEL_PATH = 'yolo/weights/best.pt'
-INPUT_CSV = 'filtered_dallas_mapillary_image_data.csv'
-OUTPUT_CSV = 'dallas_image_urls_with_preds.csv'
-INTERMEDIATE_CSV = 'dallas_intermediate_preds.csv'
+INPUT_CSV = f'intermediate_chunk_{chunk_id}.csv'
+OUTPUT_CSV = f'output_chunk_{chunk_id}.csv'
+INTERMEDIATE_CSV = f'intermediate_chunk_{chunk_id}.csv'
 URL_COL = 'url'
 
 NUM_WORKERS = 20
-BATCH_SIZE = 32
-SAVE_EVERY = 1000
+BATCH_SIZE = 16
+SAVE_EVERY = 3000
 
 # Load YOLO classifier on GPU
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 model = YOLO(MODEL_PATH).to(device)
 
 # Load and prepare CSV
-df = pd.read_csv('dallas_intermediate_preds.csv')
+df = pd.read_csv(INPUT_CSV)
 df['prediction'] = df['prediction'].fillna('')
 df['confidence'] = df['confidence'].fillna('')
 

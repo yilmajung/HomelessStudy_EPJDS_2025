@@ -7,16 +7,18 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
 import torch
 import os
+import sys
 
 # Configuration
+chunk_id = int(sys.argv[1])
 MODEL_PATH = 'yolo/weights/best.pt'
-INPUT_CSV = 'filtered_dallas_mapillary_image_data_part1.csv'
-OUTPUT_CSV = 'dallas_image_urls_with_preds.csv'
-INTERMEDIATE_CSV = 'dallas_intermediate_preds.csv'
+INPUT_CSV = f'chunk_{chunk_id}.csv'
+OUTPUT_CSV = f'output_chunk_{chunk_id}.csv'
+INTERMEDIATE_CSV = f'intermediate_chunk_{chunk_id}.csv'
 URL_COL = 'url'
 
 NUM_WORKERS = 20
-BATCH_SIZE = 32
+BATCH_SIZE = 16
 SAVE_EVERY = 3000
 
 # Load YOLO classifier on GPU
