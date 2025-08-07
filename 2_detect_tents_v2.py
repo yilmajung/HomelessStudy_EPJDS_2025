@@ -21,7 +21,7 @@ URL_COL = 'url'
 
 NUM_WORKERS = 10
 BATCH_SIZE = 32
-SAVE_EVERY = 2000
+SAVE_EVERY = 10000
 
 # Load model
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
