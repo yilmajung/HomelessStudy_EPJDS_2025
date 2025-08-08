@@ -91,14 +91,14 @@ with ThreadPoolExecutor(max_workers=NUM_WORKERS) as executor:
                     processed_since_save += 1
                 batch.clear()
             except Exception as e:
-                print(f"⚠️ Batch prediction failed: {e}")
+                print(f"Batch prediction failed: {e}")
                 batch.clear()
 
         if processed_since_save >= SAVE_EVERY:
             save_intermediate()
             processed_since_save = 0
 
-# === Final batch ===
+# Final batch
 if batch:
     try:
         preds = predict_batch(batch)
