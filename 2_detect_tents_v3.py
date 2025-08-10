@@ -24,7 +24,7 @@ URL_COL = 'url'
 
 NUM_WORKERS = int(os.getenv('NUM_WORKERS', 10))
 BATCH_SIZE = int(os.getenv('BATCH_SIZE', 32))
-SAVE_EVERY = int(os.getenv('SAVE_EVERY', 5000))  # processed rows since last save
+SAVE_EVERY = int(os.getenv('SAVE_EVERY', 50000))  # processed rows since last save
 
 REQUEST_TIMEOUT = 12
 MAX_RETRIES = 3
