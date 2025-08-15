@@ -11,6 +11,8 @@ from ultralytics import YOLO
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
 import torch
+import glob
+import re
 
 # Parse chunk ID from CLI
 chunk_id = int(sys.argv[1])  # e.g., python run_chunk_safe.py 3
@@ -32,6 +34,30 @@ BACKOFF_BASE = 1.5  # exponential backoff factor
 
 os.makedirs(os.path.dirname(INTERMEDIATE_CSV), exist_ok=True)
 
+
+# keep the last N timestamped backups alongside the "live" intermediate file
+KEEP_BACKUPS = int(os.getenv("KEEP_BACKUPS", 2))
+
+_TS_RE = re.compile(r"\.\d{8}_\d{6}$")  # matches ".YYYYMMDD_HHMMSS" at end
+
+def list_backups(base_path: str):
+    """Return sorted list of timestamped backups for base_path (newest first)."""
+    candidates = glob.glob(base_path + ".*")
+    backups = [p for p in candidates if _TS_RE.search(p)]
+    # sort by mtime descending (newest first)
+    backups.sort(key=lambda p: os.path.getmtime(p), reverse=True)
+    return backups
+
+def cleanup_backups(base_path: str, keep: int = KEEP_BACKUPS):
+    """Delete old backups beyond 'keep' most recent."""
+    backups = list_backups(base_path)
+    for p in backups[keep:]:
+        try:
+            os.remove(p)
+            # optional: print(f"Deleted old backup: {p}")
+        except Exception as e:
+            print(f"Could not delete backup {p}: {e}")
+
 # Atomic save helpers
 def atomic_save_csv(df: pd.DataFrame, path: str):
     tmp = path + ".tmp"
@@ -44,6 +70,7 @@ def rotate_and_save(df: pd.DataFrame, path: str):
     bkp = f"{path}.{ts}"
     atomic_save_csv(df, bkp)
     atomic_save_csv(df, path)
+    cleanup_backups(path)      # prune older backups
 
 # Graceful shutdown flag
 shutdown_flag = threading.Event()
